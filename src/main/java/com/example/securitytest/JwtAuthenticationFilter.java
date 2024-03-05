@@ -30,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("doFilterInternal access");
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             log.info("doFilterInternal authentication : {}",authentication);
+            log.info("doFilterInternal authentication.getAuthorities : {}", authentication.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         }

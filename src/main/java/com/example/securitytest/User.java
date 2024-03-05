@@ -1,10 +1,11 @@
 package com.example.securitytest;
 
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import java.io.Serializable;
 import java.util.*;
 
@@ -13,13 +14,19 @@ import java.util.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Entity
 public class User implements UserDetails, Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String email;
 
     private String password;
 
+    //트러블슈팅
+    @ElementCollection(fetch = FetchType.EAGER) //"failed to lazily initialize a collection of role" 오류 발생하여 추가
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 

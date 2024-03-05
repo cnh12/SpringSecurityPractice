@@ -21,17 +21,37 @@ public class UserService {
 
     private final RedisRepository redisRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
+
+
+    public User signup(SignUpRequest request){
+
+
+        userRepository.findByEmail(request.email()).ifPresent(
+                (user) -> {throw new RuntimeException("이미 가입된 이메일입니다.");}
+        );
+
+        User user = User.builder()
+                .email(request.email()).password(request.password())
+                .roles(Set.of(Role.USER))
+                .build();
+        return userRepository.save(user);
+    }
+
 
     public User login(LoginUserRequest request){
         log.info("login 진입 {}",request);
 
-        User user = User.builder()
-                .email(request.email())
-                .password(request.password())
-                .build();
-
-        log.info("login 완료 {}",user);
-        return user;
+        //DB에서 id, pw 확인
+        Optional<User> foundUser = userRepository.findByEmail(request.email());
+        if(foundUser.isPresent()){
+            User user = foundUser.get();
+            if(request.password().equals(foundUser.get().getPassword())){
+                return user;
+            }
+        }
+        
+        throw new RuntimeException("아이디나 비밀번호가 일치하지 않습니다.");
 
     }
 
@@ -55,9 +75,10 @@ public class UserService {
          */
         
         //결국 (token, email)의 형식으로 redis에 저장하여 email을 찾음
-        String email = redisRepository.findEmailByRefreshToken(refreshToken);
-        if(email==null) return null;
-        return email;
+//        String email = redisRepository.findEmailByRefreshToken(refreshToken);
+//        if(email==null) return null;
+//        return email;
+        return "";
 
     }
 
@@ -74,7 +95,10 @@ public class UserService {
                 .build();
     }
 
+    /*
     public void logout(User user) {
         redisRepository.logout(user);
     }
+
+     */
 }
