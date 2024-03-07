@@ -69,10 +69,8 @@ public class JwtTokenProvider {
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPrimaryKey(token));
         log.info("getAuthentication : {}",userDetails);
         log.info("getAuthentication : {}",userDetails.getUsername());
-        //트러블슈팅 - 위에는 다 데이터가 있는데 getAuthorities() 여기만 빈칸이었다.
-        //그 이유는 signup메소드를 통해 유저를 추가한 것이 아니라 내가 귀찮아서 그냥 DB에 바로 행을 추가했기 때문. 즉 user-role 테이블에다가는 추가를 안해줬기 때문.. ㅠㅠ
-        //아직 의문인 것은 원래 Role 테이블을 따로 추가해야 하는것인가 ...?? JPA가 알아서 추가해준건가 ..??
-        //그래도 여기서 SecurityContextHolder.getContext().setAuthentication(authentication); 하는데는 UserDetail에서 role이 있어야 getAuthorities가 정상작동 되는것을 확인할 수 있었다.
+
+        //여기서 SecurityContextHolder.getContext().setAuthentication(authentication); 하는데는 UserDetail에서 role이 있어야 getAuthorities가 정상작동 되는것을 확인할 수 있었다.
         log.info("getAuthentication : {}",userDetails.getAuthorities());
 
 

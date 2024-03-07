@@ -63,7 +63,7 @@ public class UserController {
         return jwtTokenResponse;
     }
 
-    @Transactional //"failed to lazily initialize a collection of role" 오류 발생하여 추가
+//    @Transactional //"failed to lazily initialize a collection of role" 오류 발생하여 추가
     @GetMapping("/test")
     public String test(@AuthenticationPrincipal User user){
         log.info("test완료 : {}",user);

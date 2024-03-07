@@ -51,7 +51,7 @@ public class UserService {
             }
         }
         
-        throw new RuntimeException("아이디나 비밀번호가 일치하지 않습니다.");
+        throw new RuntimeException("아이디가 존재하지 않거나 아이디나 비밀번호가 일치하지 않습니다.");
 
     }
 
@@ -84,15 +84,10 @@ public class UserService {
 
     public User findUserByEmail(String email) {
 
-        //원래는 실제로 DB에서 User를 찾아서 갖고와야함.
-        HashSet hs = new HashSet<Role>();
-        hs.add(Role.USER);
+        //실제 DB에서 User 찾아서 갖고옴.
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("email에 해당하는 user가 없습니다."));
 
-        return User.builder()
-                .email(email)
-                .password("TESTPW")
-                .roles(hs)
-                .build();
     }
 
     /*

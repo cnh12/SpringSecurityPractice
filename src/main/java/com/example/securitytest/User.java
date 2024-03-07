@@ -25,7 +25,6 @@ public class User implements UserDetails, Serializable {
 
     private String password;
 
-    //트러블슈팅
     @ElementCollection(fetch = FetchType.EAGER) //"failed to lazily initialize a collection of role" 오류 발생하여 추가
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
